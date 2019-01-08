@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from datetime import date
 from app.utils import send_data_to_sheet, get_categories
 
@@ -16,4 +16,4 @@ def submit_data():
     today = str("%s/%s/%s" % (date.today().month, date.today().day, date.today().year))
     data.append(today)
     send_data_to_sheet(data, send_data=False)
-    return render_template('index.html', current_year=date.today().year, categories=get_categories())
+    return redirect(url_for('.home', current_year=date.today().year, categories=get_categories()))
