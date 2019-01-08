@@ -104,5 +104,6 @@ venv.bak/
 .mypy_cache/
 
 # API Credentials
+credentials.json
 .vscode/settings.json
-token.json
+# token.json
