@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, request, redirect, jsonify
-from datetime import datetime
+from datetime import datetime, date
 from random import randint
 
 @app.route('/', methods=['GET', 'POST'])
@@ -10,4 +10,5 @@ def home():
 
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
-    return jsonify(entries=request.form, datetime=str(datetime.now()))
+    today = date.today()
+    return jsonify(entries=request.form, date_today=str("%s/%s/%s" % (today.month, today.day, today.year)))
