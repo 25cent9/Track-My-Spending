@@ -6,8 +6,10 @@ name = "pypi"
 [packages]
 flask = "*"
 google-api-python-client = "*"
+oauth2client = "*"
 
 [dev-packages]
+pylint = "*"
 
 [requires]
 python_version = "3.7"

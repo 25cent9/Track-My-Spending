@@ -1,14 +1,16 @@
 from app import app
 from flask import render_template, request, redirect, jsonify
-from datetime import datetime, date
-from random import randint
+from datetime import date
+from app.utils import send_data_to_sheet, get_categories
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    choices = [x*randint(1, 100) for x in range(randint(1, 100))]
-    return render_template('index.html', current_year=datetime.now().year, categories=choices)
+    return render_template('index.html', current_year=date.today().year, categories=get_categories())
 
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
-    today = date.today()
-    return jsonify(entries=request.form, date_today=str("%s/%s/%s" % (today.month, today.day, today.year)))
+    data = [value for value in request.form.values()]
+    today = str("%s/%s/%s" % (date.today().month, date.today().day, date.today().year))
+    data.append(today)
+    send_data_to_sheet(data)
+    return jsonify(entries=request.form, date_today=today)
