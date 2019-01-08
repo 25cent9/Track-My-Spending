@@ -12,5 +12,5 @@ def submit_data():
     data = [value for value in request.form.values()]
     today = str("%s/%s/%s" % (date.today().month, date.today().day, date.today().year))
     data.append(today)
-    send_data_to_sheet(data)
-    return jsonify(entries=request.form, date_today=today)
+    send_data_to_sheet(data, send_data=False)
+    return render_template('index.html', current_year=date.today().year, categories=get_categories())

@@ -1,13 +1,11 @@
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
-from random import randint, choice
 from datetime import datetime
 
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 
-MINE_ID = '1aiz9gRKu0BlPa9CjMmCwSepc4idziYT894HflLo6d-0'
-# SAMPLE_RANGE_NAME = 'Jan!A:D'
+SHEET_ID = '1aiz9gRKu0BlPa9CjMmCwSepc4idziYT894HflLo6d-0'
 
 def get_categories():
     store = file.Storage('token.json')
@@ -20,15 +18,13 @@ def get_categories():
     sheet = service.spreadsheets()
     month = datetime.now().strftime('%b')
     cell_range = '%s!C2:C' % month
-    result = sheet.values().get(spreadsheetId=MINE_ID, range=cell_range).execute()
+    result = sheet.values().get(spreadsheetId=SHEET_ID,
+                                range=cell_range).execute()
     categories = result.get('values', [])
-    unique_categories = []
-    for category in categories:
-        if category[0] not in unique_categories:
-            unique_categories.append(category[0])
-    return unique_categories
+    sorted_set = set([x[0] for x in categories])
+    return sorted_set
 
-def send_data_to_sheet(data_to_be_sent):
+def send_data_to_sheet(data_to_be_sent, send_data=True):
     store = file.Storage('token.json')
     creds = store.get()
     if not creds or creds.invalid:
@@ -41,4 +37,5 @@ def send_data_to_sheet(data_to_be_sent):
         'values': [data_to_be_sent]
     }
     service = build('sheets', 'v4', http=creds.authorize(Http()))
-    result = service.spreadsheets().values().append(spreadsheetId=MINE_ID, range=cell_range, valueInputOption='USER_ENTERED', body=body).execute()
+    if send_data:
+        service.spreadsheets().values().append(spreadsheetId=SHEET_ID, range=cell_range, valueInputOption='USER_ENTERED', body=body).execute()
