@@ -4,7 +4,7 @@ from datetime import date
 from app.utils import send_data_to_sheet, get_categories
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def home():
     return render_template('index.html', current_year=date.today().year,
                            categories=get_categories())
