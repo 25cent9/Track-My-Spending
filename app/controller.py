@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from datetime import date
 from app.utils import send_data_to_sheet, get_categories
 
@@ -9,6 +9,9 @@ def home():
     return render_template('index.html', current_year=date.today().year,
                            categories=get_categories())
 
+@app.route('/debug', methods=['POST'])
+def debugging():
+    return jsonify(request.form)
 
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
