@@ -27,7 +27,4 @@ def submit_data():
     data.append(today)
     sent = send_data_to_sheet(data, sent_key=request.form['sub_key'],
                               send_data=True)
-    if sent:
-        return 'True'
-    else:
-        return 'False'
+    return jsonify(succes=sent)
