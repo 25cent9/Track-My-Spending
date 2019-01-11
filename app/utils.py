@@ -1,11 +1,17 @@
+"""Utility functions to help with writitng to the Google Sheet"""
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 from datetime import datetime
+from dotenv import load_dotenv
+from os import getenv
 
-SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
+load_dotenv(dotenv_path='./.env')
 
-SHEET_ID = '1aiz9gRKu0BlPa9CjMmCwSepc4idziYT894HflLo6d-0'
+SCOPES = getenv('WRITE-SCOPE')
+SHEET_ID = getenv('SHEET-ID')
+SUBMISSION_KEY = getenv('SECRET-SUBMISSION-KEY')
+
 
 def get_categories():
     store = file.Storage('token.json')
@@ -24,7 +30,8 @@ def get_categories():
     sorted_set = set([x[0] for x in categories])
     return sorted_set
 
-def send_data_to_sheet(data_to_be_sent, send_data=True):
+
+def send_data_to_sheet(data_to_be_sent, sent_key=None, send_data=True):
     store = file.Storage('token.json')
     creds = store.get()
     if not creds or creds.invalid:
@@ -37,5 +44,8 @@ def send_data_to_sheet(data_to_be_sent, send_data=True):
         'values': [data_to_be_sent]
     }
     service = build('sheets', 'v4', http=creds.authorize(Http()))
-    if send_data:
+    if send_data and sent_key == SUBMISSION_KEY:
         service.spreadsheets().values().append(spreadsheetId=SHEET_ID, range=cell_range, valueInputOption='USER_ENTERED', body=body).execute()
+        return True
+    else:
+        return False

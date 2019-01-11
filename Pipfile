@@ -8,6 +8,7 @@ flask = "*"
 google-api-python-client = "*"
 oauth2client = "*"
 gunicorn = "*"
+python-dotenv = "*"
 
 [dev-packages]
 pylint = "*"
