@@ -22,7 +22,7 @@ def debugging():
 
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
-    data = [value for value in request.form.values()]
+    data = [request.form[key] for key in request.form.keys() if key != 'sub_key']
     today = str("%s/%s/%s" % (date.today().month, date.today().day, date.today().year))
     data.append(today)
     sent = send_data_to_sheet(data, sent_key=request.form['sub_key'],
