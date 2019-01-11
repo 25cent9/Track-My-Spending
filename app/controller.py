@@ -16,7 +16,8 @@ def home():
 
 @app.route('/debug', methods=['POST'])
 def debugging():
-    return jsonify(form=request.form, sumission_key=getenv('SECRET-SUBMISSION-KEY'))
+    return jsonify(form=request.form,
+                   sumission_key=getenv('SECRET-SUBMISSION-KEY'))
 
 
 @app.route('/submit_data', methods=['POST'])
